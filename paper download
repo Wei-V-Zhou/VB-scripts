@@ -1,0 +1,104 @@
+'================================　文献下载模块代码　================================'
+'===================================================================================='
+
+' Author : 两颗门牙
+' Date   : 2018/12/28
+
+
+'=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=   窗体代码模块   =*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*='
+'=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*'
+
+Private Sub Form_Load()
+'加载窗口
+WebBrowser1.Silent = True
+Timer1.Enabled = False
+ProgressBar1.Visible = False
+End Sub
+
+Private Sub Form_Resize()
+'窗口重新设置大小
+On Error GoTo tail
+WebBrowser1.Width = Me.Width - 525
+WebBrowser1.Height = Me.Height - 1335
+ProgressBar1.Left = 0.5 * Me.Width - 0.5 * ProgressBar1.Width
+ProgressBar1.Top = 0.5 * Me.Height - 0.5 * ProgressBar1.Height
+tail:
+End Sub
+'=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
+'=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
+
+
+'=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=   功能按钮模块   =*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*='
+'=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*'
+
+Private Sub Command1_Click()
+'开始进入文献下载区
+Dim str As String
+str = Trim(Text1.Text)
+If str <> "" Then
+On Error Resume Next
+WebBrowser1.Navigate "http://sci-hub.tw/http://doi.org/" & str
+Else
+MsgBox "请输入DOI再试试", vbOKCancel, "提示"
+End If
+End Sub
+
+Private Sub Command2_Click()
+'退出程序
+End
+End Sub
+
+Private Sub Command3_Click()
+'进入Europe PMC搜索页
+Me.Hide
+Form2.Show
+End Sub
+
+Private Sub Command4_Click()
+'刷新进程
+If Timer1.Enabled = True Then
+Timer1.Enabled = False
+Command4.Caption = "刷新"
+Else
+Timer1.Enabled = True
+Command4.Caption = "停止"
+End If
+End Sub
+'=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
+'=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
+
+
+'=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=   辅助命令模块   =*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*='
+'=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*'
+
+Private Sub Timer1_Timer()
+'重新进入sci-hub
+Dim str1 As String
+str1 = Trim(Text1.Text)
+On Error Resume Next
+WebBrowser1.Navigate "http://sci-hub.tw/http://doi.org/" & str1
+End Sub
+
+Private Sub WebBrowser1_DownloadBegin()
+'连接开始
+If ProgressBar1.Visible = False Then
+ProgressBar1.Visible = True
+End If
+End Sub
+
+Private Sub WebBrowser1_DownloadComplete()
+'连接结束
+ProgressBar1.Value = 0
+ProgressBar1.Visible = False
+End Sub
+
+Private Sub WebBrowser1_ProgressChange(ByVal Progress As Long, ByVal ProgressMax As Long)
+'下载进度条随着网络进度变化
+If ProgressMax = 0 Then Exit Sub
+ProgressBar1.Max = ProgressMax
+If Progress <> -1 And Progress <= ProgressMax Then
+ProgressBar1.Value = Progress
+End If
+End Sub
+'=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
+'=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
