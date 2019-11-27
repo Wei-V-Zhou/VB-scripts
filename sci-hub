@@ -1,0 +1,322 @@
+' log in
+
+Private Sub Command1_Click()
+F3.Show
+End Sub
+
+Private Sub Log_in_Click()
+On Error Resume Next
+Dim str1 As String, str2 As String
+'打开账户密码日志
+If Trim(T1.Text) = "" And Trim(T2.Text) = "" Then
+MsgBox "账号和密码不能为空", 37, "请检查"
+Else
+Open App.Path & "\vbLog.txt" For Input As #1
+Do While Not EOF(1)
+Line Input #1, str1
+Line Input #1, str2
+Loop
+Close #1
+End If
+'账号密码核对
+If T1.Text = str1 And T2.Text = str2 Then
+Me.Hide
+F2.Show
+ElseIf T1.Text <> str1 Then
+MsgBox "账号错误！", 37, "请检查"
+ElseIf T2.Text <> str2 Then
+MsgBox "密码错误！", 37, "请检查"
+End If
+End Sub
+
+Private Sub Log_out_Click()
+End
+End Sub
+
+Private Sub Regis_Click()
+If Trim(T1.Text) = "" And Trim(T2.Text) = "" Then
+MsgBox "账号和密码不能为空", 37, "请检查"
+Else
+Open App.Path & "\vbLog.txt" For Output As #1
+Print #1, T1.Text & vbCrLf & T2.Text
+Close #1
+End If
+End Sub
+
+
+' main page
+
+Option Explicit
+
+Private Sub Com1_Click()
+'文献爬虫
+On Error Resume Next
+WebBrowser1.Navigate "http://www.sci-hub.tw/"
+MsgBox "复制待下载的文献的doi或者所在界面网址，然后直接进行搜索即可！", vbOKOnly, "小提示"
+End Sub
+
+Private Sub ComExit_Click()
+'退出
+End
+End Sub
+
+Private Sub Command1_Click()
+Me.Hide
+Form1.Show
+End Sub
+
+Private Sub Command2_Click()
+'谷歌镜像
+On Error Resume Next
+WebBrowser1.Navigate "https://rain.likeso.ml/"
+End Sub
+
+Private Sub Command3_Click()
+'重大图书馆
+WebBrowser1.Navigate "http://202.202.12.15/newversion/eResource.htm"
+End Sub
+
+Private Sub Command4_Click()
+'注销
+Me.Hide
+F1.Show
+F1.T2 = ""
+End Sub
+
+Private Sub Command5_Click()
+'联系我
+frmClient.Show
+End Sub
+
+Private Sub Goba_Click()
+'后退
+On Error Resume Next
+WebBrowser1.GoBack
+End Sub
+
+Private Sub Command7_Click()
+'刷新
+On Error Resume Next
+WebBrowser1.Refresh
+End Sub
+
+Private Sub Gofo_Click()
+'前进
+On Error Resume Next
+WebBrowser1.GoForward
+End Sub
+
+Private Sub Homepage_Click()
+'打开主页
+On Error Resume Next
+WebBrowser1.Navigate "https://xueshu.baidu.com"
+End Sub
+
+Private Sub Form_Click()
+Dim objSelection
+Dim objTxtRange
+Set objSelection = WebBrowser1.Document.selection
+If Not (objSelection Is Nothing) Then
+Set objTxtRange = objSelection.createRange
+If Not (objTxtRange Is Nothing) Then
+Debug.Print objTxtRange.htmlText
+Set objTxtRange = Nothing
+End If
+Set objSelection = Nothing
+End If
+End Sub
+
+Private Sub Form_Load()
+'窗口加载时的默认设置
+Me.Caption = "小雪狐浏览器"
+WebBrowser1.Silent = True
+WebBrowser1.Top = Me.Top + 600
+WebBrowser1.Left = 800
+WebBrowser1.Width = Me.Width - 1000
+WebBrowser1.Navigate "xueshu.baidu.com"
+Form_Resize
+StatusBar1.Style = sbrSimple
+ProgressBar1.ZOrder
+End Sub
+
+Private Sub Form_Resize()
+'窗口重新设置大小时的操作
+On Error GoTo a
+WebBrowser1.Width = Me.Width - 1000
+WebBrowser1.Height = F2.Height - 1500
+ProgressBar1.Top = Me.Height - StatusBar1.Height - 455
+ProgressBar1.Left = 0.25 * StatusBar1.Width - 500
+ProgressBar1.Width = 0.75 * Me.Width - 250
+a:
+End Sub
+
+
+Private Sub WebBrowser1_DownloadBegin()
+'下载开始时状态栏显示“正在跨越重重网关，请稍后...”
+If ProgressBar1.Visible = False Then
+ProgressBar1.Visible = True
+End If
+StatusBar1.SimpleText = "正在跨越重重网关，请稍后..."
+End Sub
+  
+Private Sub WebBrowser1_DownloadComplete()
+'下载完成时状态栏显示“连接完成啦”
+StatusBar1.SimpleText = "连接完成啦！"
+ProgressBar1.Value = 0
+ProgressBar1.Visible = False
+End Sub
+  
+Private Sub WebBrowser1_NewWindow2(ByRef ppDisp As Object, ByRef Cancel As Boolean)
+'在本软件内打开新网页
+On Error Resume Next
+Cancel = True
+WebBrowser1.Navigate2 WebBrowser1.Document.activeElement.href
+End Sub
+
+Private Sub WebBrowser1_ProgressChange(ByVal Progress As Long, ByVal ProgressMax As Long)
+'下载进行时进度条变化
+If ProgressMax = 0 Then Exit Sub
+ProgressBar1.Max = ProgressMax
+If Progress <> -1 And Progress <= ProgressMax Then
+ProgressBar1.Value = Progress
+End If
+End Sub
+
+' tip
+
+Private Sub Form_Click()
+Me.Hide
+End Sub
+
+' data process
+
+
+Dim m As Integer
+
+Private Sub BaoCun_Click()
+Dim str3 As String
+CommonDialog1.FileName = ""
+CommonDialog1.Filter = "所有文件|*.*|文本文件|*.txt|Excel表格|*.xls|Word文档|*.doc"
+CommonDialog1.FilterIndex = 2
+CommonDialog1.DialogTitle = "保存文件"
+CommonDialog1.ShowSave
+If CommonDialog1.FileName = "" Then
+MsgBox "未输入所要保存的文件名", 37, "请重新输入"
+Else
+Open CommonDialog1.FileName For Output As #1
+Print #1, T1.Text
+Close #1
+End If
+End Sub
+
+Private Sub BiaoZhun_Click()
+Dim str2() As String
+T1.Text = Replace(T1.Text, ",", " ")
+str2 = Split(T1.Text, vbCrLf)
+T1.Text = ""
+For i = LBound(str2) To UBound(str2)
+If i >= 40 And i <= UBound(str2) Then
+T1.Text = T1.Text & vbCrLf & str2(i)
+End If
+i = i + 1
+Next
+End Sub
+
+Private Sub DuQu_Click()
+Dim str1 As String
+T1.Text = ""
+'----------------------------------------------------------------------------------
+'使用文件对话框打开文件
+CommonDialog1.FileName = ""
+CommonDialog1.Filter = "所有文件|*.*|文本文件|*.txt|Excel表格|*.xls|Word文档|*.doc"
+CommonDialog1.FilterIndex = 2
+CommonDialog1.DialogTitle = "打开文件"
+CommonDialog1.ShowOpen
+If CommonDialog1.FileName = "" Then
+MsgBox "未选择所要打开文件", 37, "请重新选择"
+Else
+'----------------------------------------------------------------------------------
+'读取文件
+Animation1.Open App.Path & "\" & "FILECOPY.AVI"
+'App.Path & "\" & "FILECOPY.AVI"
+Animation1.Visible = True
+Animation1.Play
+Open CommonDialog1.FileName For Input As #1
+Do While Not EOF(1)
+Line Input #1, str1
+T1.Text = T1.Text & vbCrLf & str1
+Loop
+Close #1
+Animation1.Stop
+Animation1.Visible = False
+MsgBox "读取完毕", vbOKOnly, "提示"
+End If
+End Sub
+
+Private Sub Exit_Click()
+Dim n As Integer
+n = MsgBox("我已确定数据已经保存？", vbOKCancel, "提示")
+If n = 1 Then
+Me.Hide
+F2.Show
+End If
+End Sub
+
+Private Sub Form_Load()
+Animation1.Visible = False
+End Sub
+
+Private Sub QingChu_Click()
+T1.Text = ""
+End Sub
+
+' web server
+
+Private Sub Command1_Click()
+On Error Resume Next
+'退出
+Winsock1.Close
+Me.Hide
+F2.Show
+End Sub
+
+Private Sub Command2_Click()
+On Error Resume Next
+'发送
+Winsock1.SendData Text1.Text & ":" & Text3.Text
+Text2.Text = Text2.Text + Chr(13) + Chr(10) + CStr(Date) + Chr(32) + CStr(Time$()) + Chr(13) + Chr(10) + "我：" & Text3.Text
+Text3.Text = ""
+Text2.SelStart = Len(Text2.Text)
+End Sub
+
+Private Sub Command3_Click()
+On Error Resume Next
+'连接
+Winsock1.RemoteHost = "172.22.250.193"
+Winsock1.RemotePort = 2008
+If Winsock1.State = sckClosed Then
+Winsock1.Connect
+Label5.Caption = "你已经成功连接，请通话..."
+End If
+End Sub
+
+Private Sub Text3_KeyDown(KeyCode As Integer, Shift As Integer)
+On Error Resume Next
+'按enter键发送数据
+If KeyCode = 13 Then
+Text2.Text = Text2.Text + Chr(13) + Chr(10) + CStr(Date) + Chr(32) + CStr(Time$()) + Chr(13) + Chr(10) + "我：" & Text3.Text
+Winsock1.SendData Text1.Text & ":" & Text3.Text
+Text3.Text = ""
+End If
+Text2.SelStart = Len(Text2.Text)
+End Sub
+
+Private Sub Winsock1_DataArrival(ByVal bytesTotal As Long)
+On Error Resume Next
+'接收
+Beep
+Dim strdata As String
+Winsock1.GetData strdata
+Text2.Text = Text2.Text + Chr(13) + Chr(10) + CStr(Date) + Chr(32) + CStr(Time$()) + Chr(13) + Chr(10) & strdata
+Text2.SelStart = Len(Text2.Text)
+End Sub
