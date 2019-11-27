@@ -1,0 +1,51 @@
+Dim Ax As Variant
+Dim a1, a2, b1, b2 As Integer
+Dim c1, c2, d1, d2 As Integer
+Dim e1, e2, f1, f2 As Integer
+Dim g1, g2 As Integer
+
+'====================== 窗体模块 ======================
+'++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+'窗体加载事件，定义位置尺寸
+Private Sub Form_Load()
+Ax = vbaxes(P1.hWnd)
+a1 = Me.Width:     a2 = Me.Height
+b1 = P1.Width:     b2 = P1.Height
+c1 = PutIn.Width:  c2 = PutIn.Height
+d1 = Frame1.Width: d2 = Frame1.Height
+e1 = PutOut.Left:  e2 = PutOut.Width
+f1 = Comm1.Width:  f2 = Comm1.Height
+g1 = Comm1.Left:   g2 = Comm2.Left
+End Sub
+
+'窗体改变事件，定义尺寸改变
+Private Sub Form_Resize()
+
+P1.Width = Me.Width * (b1 / a1)
+P1.Height = Me.Height * (b2 / a2)
+PutIn.Width = Me.Width * (c1 / a1)
+PutIn.Height = Me.Height * (c2 / a2)
+PutIn.Top = P1.Height + 0.5 * (Me.Height - P1.Height) - 0.75 * PutIn.Height
+Frame1.Width = Me.Width * (d1 / a1)
+Frame1.Height = Me.Height * (d2 / a2)
+Frame1.Top = P1.Height + 0.5 * (Me.Height - P1.Height) - 0.75 * Frame1.Height
+Frame1.Left = 0.5 * Me.Width - 0.5 * Frame1.Width
+Label1.Left = 0.5 * Frame1.Width - 0.5 * Label1.Width
+PutOut.Width = PutIn.Width
+PutOut.Height = PutIn.Height
+PutOut.Top = PutIn.Top
+PutOut.Left = Me.Width - PutOut.Width - (a1 - e1 - e2)
+Comm1.Width = Frame1.Width * (f1 / d1)
+Comm1.Height = Frame1.Height * (f2 / d2)
+Comm2.Left = Comm1.Left + Comm1.Width + (g2 - g1 - f1)
+Comm2.Width = Comm1.Width
+Comm2.Height = Comm1.Height
+Comm3.Left = Comm2.Left + Comm2.Width + (g2 - g1 - f1)
+Comm3.Width = Comm2.Width
+Comm3.Height = Comm2.Height
+End Sub
+
+'++++++++++++++++++++++++++++++++++++++++++++++++++++++
+'------------------------------------------------------
