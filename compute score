@@ -1,0 +1,55 @@
+Dim Arr() As Double
+
+Private Sub C1_Click()
+Static n As Integer
+Dim Sum, Ave, Max, Min As Integer
+n = n + 1
+'保留动态数组
+ReDim Preserve Arr(n)
+Sum = Val(Text1.Item(0))
+Max = Val(Text1.Item(0))
+Min = Max
+'寻找最大值与最小值
+For i = 1 To 6
+If Val(Text1.Item(i)) > Max Then
+Max = Val(Text1.Item(i))
+ElseIf Val(Text1.Item(i)) < Min Then
+Min = Val(Text1.Item(i))
+End If
+Sum = Sum + Val(Text1.Item(i))
+Next i
+'求平均值
+Ave = (Sum - Max - Min) / 5
+Text2.Text = Text2.Text & "第" & n & "位选手的得分：" & Ave & "分" & vbCrLf
+'清空打分栏
+For j = 0 To 6
+Text1.Item(j) = ""
+Next j
+Arr(n) = Ave
+End Sub
+
+Private Sub C2_Click()
+'选择排序（降序）
+Dim tmax, car As Integer
+For i = 1 To UBound(Arr) - 1
+tmax = i
+For j = i + 1 To UBound(Arr)
+If Arr(tmax) < Arr(j) Then
+tmax = j
+End If
+Next j
+car = Arr(i)
+Arr(i) = Arr(tmax)
+Arr(tmax) = car
+Next i
+'输出结果
+For t = 1 To UBound(Arr)
+Text3.Text = Text3.Text & "第" & t & "名得分为：" & Arr(t) & "分" & vbCrLf
+Next t
+End Sub
+
+Private Sub C3_Click()
+'关闭
+Unload Me
+End
+End Sub
