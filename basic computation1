@@ -1,0 +1,13 @@
+
+Private Sub Command1_Click()
+If Combo1.Text = "cos" Then
+Text2.Text = Round(Cos(Val(Text1.Text) / 180 * 3.14159), 3)
+ElseIf Combo1.Text = "sin" Then
+Text2.Text = Round(Sin(Val(Text1.Text) / 180 * 3.14159), 3)
+End If
+End Sub
+
+Private Sub Form_Load()
+Combo1.AddItem "cos"
+Combo1.AddItem "sin"
+End Sub
