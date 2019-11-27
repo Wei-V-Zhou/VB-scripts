@@ -1,0 +1,512 @@
+Dim Str As String
+
+Private Sub Center_Click()
+'居中对齐
+If Text1.SelText = "" Then
+Text1.SelStart = 0
+Text1.SelLength = Len(Text1.Text)
+End If
+Text1.SelAlignment = 2
+End Sub
+
+Private Sub Color_Click()
+'设置颜色
+CommonDialog1.ShowColor
+If Text1.SelText = "" Then
+Text1.SelStart = 0
+Text1.SelLength = Len(Text1.Text)
+End If
+Text1.SelColor = CommonDialog1.Color
+End Sub
+
+Private Sub Combo1_Click()
+'改变字体
+If Text1.SelText = "" Then
+Text1.SelStart = 0
+Text1.SelLength = Len(Text1.Text)
+End If
+Text1.SelFontName = Combo1.Text
+End Sub
+
+Private Sub Command1_Click()
+'黑色
+If Text1.SelText = "" Then
+Text1.SelStart = 0
+Text1.SelLength = Len(Text1.Text)
+End If
+Text1.SelColor = &H80000008
+End Sub
+
+Private Sub Command10_Click()
+'斜体
+If Text1.SelText = "" Then
+Text1.SelStart = 0
+Text1.SelLength = Len(Text1.Text)
+End If
+If Text1.SelItalic = False Then
+Text1.SelItalic = True
+Else
+Text1.SelItalic = False
+End If
+End Sub
+
+Private Sub Command11_Click()
+'播放音乐
+Command12.Visible = True
+Command13.Visible = True
+File1.Pattern = "*.mp3"
+Dim s As String
+s = Dir1.Path
+s = s & "\" & File1.FileName
+WindowsMediaPlayer1.URL = s
+End Sub
+
+Private Sub Command12_Click()
+'暂停
+WindowsMediaPlayer1.Controls.pause
+End Sub
+
+Private Sub Command13_Click()
+'播放
+WindowsMediaPlayer1.Controls.play
+End Sub
+
+Private Sub Command14_Click()
+'读取思想汇报
+On Error Resume Next
+Randomize
+Dim i As Integer, j As Integer, k As Integer
+Dim a As String, b As String, c As String, d As String
+Dim arr(100) As String
+Open App.Path & "\思想汇报.txt" For Input As #1
+Do While Not EOF(1)
+Line Input #1, a
+If Mid(a, 1, 1) <> "Q" Then
+b = b + a
+Else
+i = i + 1
+arr(i) = b
+b = ""
+b = b + a
+End If
+Loop
+j = Int(i * Rnd)
+Text1.Text = arr(j)
+Close #1
+'一键排版
+k = MsgBox("请问需要一键排版吗？", vbYesNo + vbQuestion, "提示")
+If k = 6 Then
+Text1.Text = Replace(Text1.Text, " ", vbCrLf)
+Text1.Text = Replace(Text1.Text, "Q", "")
+End If
+End Sub
+
+Private Sub Command15_Click()
+'读取观后感悟
+On Error Resume Next
+Randomize
+Dim i As Integer, j As Integer, k As Integer
+Dim a As String, b As String, c As String, d As String
+Dim arr(100) As String
+Open App.Path & "\观后感悟.txt" For Input As #1
+Do While Not EOF(1)
+Line Input #1, a
+If Mid(a, 1, 1) <> "R" Then
+b = b + a
+Else
+i = i + 1
+arr(i) = b
+b = ""
+b = b + a
+End If
+Loop
+j = Int(i * Rnd)
+Text1.Text = arr(j)
+Close #1
+'一键排版
+k = MsgBox("请问需要一键排版吗？", vbYesNo + vbQuestion, "提示")
+If k = 6 Then
+Text1.Text = Replace(Text1.Text, " ", vbCrLf)
+Text1.Text = Replace(Text1.Text, "　　", vbCrLf + "　　")
+Text1.Text = Replace(Text1.Text, "R", "")
+End If
+End Sub
+
+Private Sub Command16_Click()
+'读取英语作文
+On Error Resume Next
+Randomize
+Dim i As Integer, j As Integer, k As Integer
+Dim a As String, b As String, c As String, d As String
+Dim arr(100) As String
+Open App.Path & "\英语作文.txt" For Input As #1
+Do While Not EOF(1)
+Line Input #1, a
+If Mid(a, 1, 1) <> "葳" Then
+b = b + a
+Else
+i = i + 1
+arr(i) = b
+b = ""
+b = b + a
+End If
+Loop
+j = Int(i * Rnd)
+Text1.Text = arr(j)
+Close #1
+'一键排版
+k = MsgBox("请问需要一键排版吗？", vbYesNo + vbQuestion, "提示")
+If k = 6 Then
+Text1.Text = Replace(Text1.Text, "　　", vbCrLf)
+Text1.Text = Replace(Text1.Text, "葳", "")
+Text1.Text = Replace(Text1.Text, "段首", vbCrLf + "段首")
+Text1.Text = Replace(Text1.Text, "中间", vbCrLf + "中间")
+Text1.Text = Replace(Text1.Text, "结尾", vbCrLf + "结尾")
+Text1.Text = Replace(Text1.Text, "一", vbCrLf + "一")
+Text1.Text = Replace(Text1.Text, "二", vbCrLf + "二")
+Text1.Text = Replace(Text1.Text, "三", vbCrLf + "三")
+Text1.Text = Replace(Text1.Text, "四", vbCrLf + "四")
+Text1.Text = Replace(Text1.Text, "五", vbCrLf + "五")
+Text1.Text = Replace(Text1.Text, "1", vbCrLf + "1")
+Text1.Text = Replace(Text1.Text, "2", vbCrLf + "2")
+Text1.Text = Replace(Text1.Text, "3", vbCrLf + "3")
+Text1.Text = Replace(Text1.Text, "4", vbCrLf + "4")
+Text1.Text = Replace(Text1.Text, "5", vbCrLf + "5")
+Text1.Text = Replace(Text1.Text, "6", vbCrLf + "6")
+Text1.Text = Replace(Text1.Text, "7", vbCrLf + "7")
+Text1.Text = Replace(Text1.Text, "8", vbCrLf + "8")
+Text1.Text = Replace(Text1.Text, "9", vbCrLf + "9")
+Text1.Text = Replace(Text1.Text, "10", vbCrLf + "10")
+Text1.Text = Replace(Text1.Text, "11", vbCrLf + "11")
+Text1.Text = Replace(Text1.Text, "12", vbCrLf + "12")
+End If
+End Sub
+
+Private Sub Command2_Click()
+'红色
+If Text1.SelText = "" Then
+Text1.SelStart = 0
+Text1.SelLength = Len(Text1.Text)
+End If
+Text1.SelColor = &HFF&
+End Sub
+
+Private Sub Command3_Click()
+'绿色
+If Text1.SelText = "" Then
+Text1.SelStart = 0
+Text1.SelLength = Len(Text1.Text)
+End If
+Text1.SelColor = &HFF00&
+End Sub
+
+Private Sub Command4_Click()
+'蓝色
+If Text1.SelText = "" Then
+Text1.SelStart = 0
+Text1.SelLength = Len(Text1.Text)
+End If
+Text1.SelColor = &HFFFF00
+End Sub
+
+Private Sub Command5_Click()
+'左对齐
+If Text1.SelText = "" Then
+Text1.SelStart = 0
+Text1.SelLength = Len(Text1.Text)
+End If
+Text1.SelAlignment = 0
+End Sub
+
+Private Sub Command6_Click()
+'居中对齐
+If Text1.SelText = "" Then
+Text1.SelStart = 0
+Text1.SelLength = Len(Text1.Text)
+End If
+Text1.SelAlignment = 2
+End Sub
+
+Private Sub Command7_Click()
+'右对齐
+If Text1.SelText = "" Then
+Text1.SelStart = 0
+Text1.SelLength = Len(Text1.Text)
+End If
+Text1.SelAlignment = 1
+End Sub
+
+Private Sub Command8_Click()
+'下划线
+If Text1.SelText = "" Then
+Text1.SelStart = 0
+Text1.SelLength = Len(Text1.Text)
+End If
+If Text1.SelUnderline = False Then
+Text1.SelUnderline = True
+Else
+Text1.SelUnderline = False
+End If
+End Sub
+
+Private Sub Command9_Click()
+'加粗
+If Text1.SelText = "" Then
+Text1.SelStart = 0
+Text1.SelLength = Len(Text1.Text)
+End If
+If Text1.SelBold = False Then
+Text1.SelBold = True
+Else
+Text1.SelBold = False
+End If
+End Sub
+
+Private Sub Copy_Click()
+'复制
+Str = Text1.SelText
+End Sub
+
+Private Sub Cut_Click()
+'剪切
+Str = Text1.SelText
+Text1.SelText = ""
+End Sub
+
+Private Sub Delete_Click()
+'删除
+Text1.SelText = ""
+End Sub
+
+Private Sub Dir1_Change()
+'文件路径一致
+File1.Path = Dir1.Path
+End Sub
+
+Private Sub Drive1_Change()
+'驱动路径一致
+Dir1.Path = Drive1.Drive
+End Sub
+
+Private Sub Entertainment_Click()
+'窗体变化颜色
+Timer1.Interval = 1000 / HScroll1.Value
+If Timer1.Enabled = True Then
+Timer1.Enabled = False
+Me.BackColor = &H8000000F
+Else
+Timer1.Enabled = True
+End If
+End Sub
+
+Private Sub Exit_Click()
+'退出
+Dim i As Integer
+i = MsgBox("是否退出？", vbOKCancel + vbQuestion, "提示")
+If i = 1 Then
+End
+End If
+End Sub
+
+Private Sub Font_Click()
+'设置字体
+CommonDialog1.ShowFont
+If Text1.SelText = "" Then
+Text1.SelStart = 0
+Text1.SelLength = Len(Text1.Text)
+End If
+Text1.SelFontName = CommonDialog1.FontName
+Text1.SelFontSize = CommonDialog1.FontSize
+Text1.SelBold = CommonDialog1.FontBold
+Text1.SelItalic = CommonDialog1.FontItalic
+Text1.SelStrikeThru = CommonDialog1.FontStrikethru
+Text1.SelUnderline = CommonDialog1.FontUnderline
+End Sub
+
+Private Sub Form_Load()
+'装载字体+驱动+隐藏
+Combo1.AddItem ("宋体")
+Combo1.AddItem ("黑体")
+Combo1.AddItem ("楷体")
+Combo1.AddItem ("隶书")
+WindowsMediaPlayer1.Visible = False
+Command11.Enabled = False
+Drive1.Visible = False
+Dir1.Visible = False
+File1.Visible = False
+Command12.Visible = False
+Command13.Visible = False
+Command14.Visible = False
+Command15.Visible = False
+Command16.Visible = False
+Command14.Top = Text1.Top + Text1.Height / 4 - Command14.Height / 2
+Command15.Top = Text1.Top + 2 * Text1.Height / 4 - Command15.Height / 2
+Command16.Top = Text1.Top + 3 * Text1.Height / 4 - Command16.Height / 2
+End Sub
+
+Private Sub Form_Resize()
+'窗体改变大小
+Combo1.Width = 0.1 * Me.Width
+Drive1.Width = Combo1.Width
+Dir1.Width = Drive1.Width
+File1.Width = Dir1.Width
+Command4.Left = Command1.Left + Combo1.Width - Command1.Width
+Command2.Left = Command1.Left + (Command4.Left - Command1.Left) / 3
+Command3.Left = Command1.Left + 2 * (Command4.Left - Command1.Left) / 3
+HScroll1.Width = 0.1 * Me.Width
+Command7.Left = Command5.Left + Combo1.Width - Command7.Width
+Command6.Left = Command5.Left + (Command7.Left - Command5.Left) / 2
+Command10.Left = Command8.Left + Combo1.Width - Command10.Width
+Command9.Left = Command8.Left + (Command10.Left - Command8.Left) / 2
+Command13.Left = Command11.Left + Combo1.Width - Command13.Width
+Command12.Left = Command11.Left + (Command13.Left - Command11.Left) / 2
+Text1.Width = 0.76 * Me.Width
+Text1.Height = 0.86 * Me.Height
+Text1.Left = Combo1.Left + Combo1.Width + 225
+Command14.Left = Text1.Left + Text1.Width
+Command15.Left = Command14.Left
+Command16.Left = Command15.Left
+Command14.Top = Text1.Top + Text1.Height / 4 - Command14.Height / 2
+Command15.Top = Text1.Top + 2 * Text1.Height / 4 - Command15.Height / 2
+Command16.Top = Text1.Top + 3 * Text1.Height / 4 - Command16.Height / 2
+End Sub
+
+Private Sub Free_Time_Click()
+'开闭休闲模式
+If Command11.Enabled = False Then
+Command11.Enabled = True
+Drive1.Visible = True
+Dir1.Visible = True
+File1.Visible = True
+Else
+Command11.Enabled = False
+Drive1.Visible = False
+Dir1.Visible = False
+File1.Visible = False
+Command12.Visible = False
+Command13.Visible = False
+End If
+End Sub
+
+Private Sub Help_Click()
+'帮助文档
+CommonDialog1.HelpCommand = cdlHelpContents
+CommonDialog1.HelpFile = App.Path & "HELP.doc"
+CommonDialog1.ShowHelp
+End Sub
+
+Private Sub HScroll1_Change()
+'改变字体大小和时间快慢
+If Timer1.Enabled = True Then
+Timer1.Interval = 1000 / HScroll1.Value
+End If
+If Text1.SelText = "" Then
+Text1.SelStart = 0
+Text1.SelLength = Len(Text1.Text)
+End If
+Text1.SelFontSize = 7.2 * HScroll1.Value
+End Sub
+
+Private Sub Lazy_Click()
+'懒人模式触发
+If Command14.Visible = False And Command15.Visible = False And Command16.Visible = False Then
+Command14.Visible = True
+Command15.Visible = True
+Command16.Visible = True
+Else
+Command14.Visible = False
+Command15.Visible = False
+Command16.Visible = False
+End If
+End Sub
+
+Private Sub Left_Click()
+'左对齐
+If Text1.SelText = "" Then
+Text1.SelStart = 0
+Text1.SelLength = Len(Text1.Text)
+End If
+Text1.SelAlignment = 0
+End Sub
+
+Private Sub Open_Click()
+'打开文件
+Dim Filelocation As String, str1 As String
+CommonDialog1.Filter = "文本文件|*.txt|Word文档|*.doc|AllFile|*.*"
+CommonDialog1.FilterIndex = 0
+CommonDialog1.ShowOpen
+Filelocation = CommonDialog1.FileName
+Text1.LoadFile Filelocation
+'Open Filelocation For Input As #1
+'Do While Not EOF(1)
+'Line Input #1, str1
+'Text1.Text = Text1.Text + str1 + vbCrLf
+'Loop
+'Close #1
+End Sub
+
+Private Sub Paste_Click()
+'粘贴
+Text1.SelText = Str
+End Sub
+
+Private Sub Print_Click()
+'打印输出
+Dim i As Integer, BeginPage As Integer, EndPage As Integer
+Dim NumCopies As Integer, Orientation As Integer
+CommonDialog1.ShowPrinter
+BeginPage = CommonDialog1.FromPage
+EndPage = CommonDialog1.ToPage
+NumCopies = CommonDialog1.Copies
+Orientation = CommonDialog1.Orientation
+For i = 1 To NumCopies
+Printer.Print Text1.Text
+Next i
+Printer.EndDoc
+End Sub
+
+Private Sub Right_Click()
+'右对齐
+If Text1.SelText = "" Then
+Text1.SelStart = 0
+Text1.SelLength = Len(Text1.Text)
+End If
+Text1.SelAlignment = 1
+End Sub
+
+Private Sub Save_Click()
+'保存文件
+Dim Filelocation As String, str2 As String
+CommonDialog1.Filter = "文本文件|*.txt|Word文档|*.doc|AllFile|*.*"
+CommonDialog1.FilterIndex = 2
+CommonDialog1.ShowSave
+Filelocation = CommonDialog1.FileName
+If CommonDialog1.FilterIndex = 1 Then
+Open Filelocation For Output As #1
+Print #1, Text1.Text
+Close #1
+Else
+Text1.SaveFile Filelocation
+End If
+End Sub
+
+Private Sub Text1_Change()
+'颜色随打字变化
+If Timer1.Enabled = True Then
+Randomize
+Me.BackColor = RGB(255 * Rnd(), 255 * Rnd(), 255 * Rnd())
+End If
+End Sub
+
+Private Sub Text1_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+'右键快捷菜单
+If Button = 2 Then
+PopupMenu Popup
+End If
+End Sub
+
+Private Sub Timer1_Timer()
+'颜色随时间变化
+Randomize
+Me.BackColor = RGB(255 * Rnd(), 255 * Rnd(), 255 * Rnd())
+End Sub
