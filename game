@@ -1,0 +1,254 @@
+' module
+
+'================================　雷霆战机全局模块　================================'
+'===================================================================================='
+
+' Author : 两颗门牙
+' Date   : 2018/11/17
+
+
+'全局变量声明
+Public enemy_speed As Integer
+Public bullet_speed As Integer
+Public move_step As Integer
+
+
+'难度选择
+Public Sub Level_Choose(frm As Form)
+If frm.Easy.Enabled = False Then
+enemy_speed = 30
+ElseIf frm.Hard.Enabled = False Then
+enemy_speed = 60
+ElseIf frm.Lord.Enabled = False Then
+enemy_speed = 100
+End If
+End Sub
+
+'灵敏度选择
+Public Sub Sensi_Choose(frm As Form)
+If frm.Simp.Enabled = False Then
+bullet_speed = 30
+move_step = 120
+ElseIf frm.Fast.Enabled = False Then
+bullet_speed = 60
+move_step = 200
+ElseIf frm.Ligh.Enabled = False Then
+bullet_speed = 20
+move_step = 400
+End If
+End Sub
+
+'创建子弹
+Public Sub createObjectGroupBullet(frm As Form, obj As Object, i As Integer, objPlane As Object)
+If i > 1000 Then Exit Sub
+Load obj(i)
+obj(i).Top = objPlane.Top
+obj(i).Left = objPlane.Left + objPlane.Width / 2
+obj(i).Visible = True
+End Sub
+
+'创建敌机
+Public Sub createObjectGroupEnemy(frm As Form, obj As Object, e As Integer)
+If e > 5 Then Exit Sub
+Randomize Time
+Load obj(e)
+obj(e).Top = -obj(e).Height
+obj(e).Left = Rnd * (frm.Width - obj(0).Width)
+obj(e).Visible = True
+End Sub
+
+'逻辑的碰撞检测
+Public Function Collide(obj1 As Object, obj2 As Object) As Boolean
+If obj1.Left + obj1.Width > obj2.Left And obj1.Left < obj2.Left + obj2.Width _
+And obj1.Top + obj1.Height > obj2.Top And obj1.Top < obj2.Top + obj2.Height Then
+Collide = True
+Else
+Collide = False
+End If
+End Function
+
+' main page
+
+'================================　雷霆战机窗体模块　================================'
+'===================================================================================='
+
+' Author : 两颗门牙
+' Date   : 2018/11/17
+
+
+'=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=   窗体事件模块   =*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*='
+'=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*'
+
+
+'窗体卸载事件
+Private Sub Exi_Click()
+Unload Me
+End
+End Sub
+
+'窗体加载事件
+Private Sub Form_Load()
+Timer1.Enabled = False
+Start.Enabled = False
+Easy.Visible = False
+Hard.Visible = False
+Lord.Visible = False
+Call Simp_Click
+End Sub
+
+'窗体移动事件
+Private Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
+'移动上下左右
+Select Case KeyCode
+Case vbKeyLeft
+player.Left = player.Left - move_step
+Case vbKeyRight
+player.Left = player.Left + move_step
+Case vbKeyUp
+player.Top = player.Top - move_step
+Case vbKeyDown
+player.Top = player.Top + move_step
+End Select
+'控制移动范围
+If player.Left < -player.Width / 2 + Me.enemy(0).Width / 2 Then
+player.Left = -player.Width / 2 + Me.enemy(0).Width / 2
+ElseIf player.Left > Me.Width - player.Width / 2 - Me.enemy(0).Width / 2 Then
+player.Left = Me.Width - player.Width / 2 - Me.enemy(0).Width / 2
+ElseIf player.Top < 0 Then
+player.Top = 0
+ElseIf player.Top > Me.Height - player.Height Then
+player.Top = Me.Height - player.Height
+End If
+End Sub
+
+'=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
+'=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
+
+
+'=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=   功能按钮模块   =*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*='
+'=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*'
+
+
+'重新开始
+Private Sub Restart_Click()
+Level.Visible = True
+Start.Visible = True
+Exi.Visible = True
+Timer1.Enabled = False
+End Sub
+
+'开始事件
+Private Sub Start_Click()
+Level.Visible = False
+Start.Visible = False
+Exi.Visible = False
+Timer1.Enabled = True
+End Sub
+
+'难度选择事件
+Private Sub Level_Click()
+Easy.Visible = True
+Hard.Visible = True
+Lord.Visible = True
+End Sub
+'难度低
+Private Sub Easy_Click()
+Easy.Enabled = False
+Hard.Enabled = True
+Lord.Enabled = True
+Call Level_Choose(Me)
+Start.Enabled = True
+Easy.Visible = False: Hard.Visible = False: Lord.Visible = False
+End Sub
+'难度中
+Private Sub Hard_Click()
+Easy.Enabled = True
+Hard.Enabled = False
+Lord.Enabled = True
+Call Level_Choose(Me)
+Start.Enabled = True
+Easy.Visible = False: Hard.Visible = False: Lord.Visible = False
+End Sub
+'难度高
+Private Sub Lord_Click()
+Easy.Enabled = True
+Hard.Enabled = True
+Lord.Enabled = False
+Call Level_Choose(Me)
+Start.Enabled = True
+Easy.Visible = False: Hard.Visible = False: Lord.Visible = False
+End Sub
+
+'灵敏度选择事件
+'灵敏度低
+Private Sub Simp_Click()
+Simp.Enabled = False
+Fast.Enabled = True
+Ligh.Enabled = True
+Call Sensi_Choose(Me)
+End Sub
+'灵敏度中
+Private Sub Fast_Click()
+Simp.Enabled = True
+Fast.Enabled = False
+Ligh.Enabled = True
+Call Sensi_Choose(Me)
+End Sub
+'灵敏度高
+Private Sub Ligh_Click()
+Simp.Enabled = True
+Fast.Enabled = True
+Ligh.Enabled = False
+Call Sensi_Choose(Me)
+End Sub
+
+'定时器触发事件
+Private Sub Timer1_Timer()
+Randomize
+'创建子弹
+Static s As Integer
+Static n As Integer
+n = n + 1
+If n Mod 30 = 0 Then
+s = s + 1
+createObjectGroupBullet Me, Me.bullet, s, Me.player
+End If
+For m = 0 To Me.bullet.Count - 1
+Me.bullet(m).Top = Me.bullet(m).Top - bullet_speed
+If Me.bullet(m).Top <= Me.Top Then
+Me.bullet(m).Visible = False
+End If
+Next m
+'创建敌机
+Static i As Integer
+If n Mod 50 = 0 Then
+i = i + 1
+createObjectGroupEnemy Me, Me.enemy, i
+End If
+For j = 0 To Me.enemy.Count - 1
+Me.enemy(j).Top = Me.enemy(j).Top + enemy_speed
+If Me.enemy(j).Top >= Me.Height Then
+Me.enemy(j).Visible = False
+If Me.enemy(Me.enemy.Count - 1) Then
+Me.enemy(j).Visible = True
+Me.enemy(j).Top = Me.enemy(j).Top - 10000
+Me.enemy(j).Left = Rnd * (Me.Width - Me.enemy(j).Width)
+End If
+End If
+Next j
+'碰撞检测
+For p = 0 To Me.enemy.Count - 1
+For q = 0 To Me.bullet.Count - 1
+If Collide(Me.enemy(p), Me.bullet(q)) Then
+If Me.enemy(p).Visible And Me.bullet(q).Visible Then
+Me.enemy(p).Visible = False
+Me.bullet(q).Visible = False
+End If
+End If
+Next q
+Next p
+End Sub
+
+'=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
+'=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
+
