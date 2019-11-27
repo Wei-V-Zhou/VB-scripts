@@ -1,0 +1,32 @@
+Dim n, m As Long
+
+Private Sub Command1_Click()
+If Timer1.Enabled = False Then
+Timer1.Enabled = True
+End If
+End Sub
+
+Private Sub Command2_Click()
+Timer1.Enabled = False
+Print "用时：" & m & "秒"; Tab; "总用时：" & n; "秒"
+m = 0
+End Sub
+
+Private Sub Command3_Click()
+m = 0
+n = 0
+Label1.Caption = 0
+Timer1.Enabled = False
+End Sub
+
+Private Sub Form_Load()
+Timer1.Interval = 1000
+Timer1.Enabled = False
+Label1.Caption = 0
+End Sub
+
+Private Sub Timer1_Timer()
+Label1.Caption = Val(Label1.Caption) + 1
+n = n + 1
+m = m + 1
+End Sub
