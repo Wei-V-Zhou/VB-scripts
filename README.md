@@ -1,1 +1,1 @@
-# VB-scripts
+# VB-scripts of my undergraduate campus
