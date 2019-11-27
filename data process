@@ -1,0 +1,119 @@
+'     佛佛佛    佛佛佛
+'  佛佛佛佛佛  佛佛佛佛佛
+'   佛佛佛佛佛佛佛佛佛佛佛
+'    佛佛佛佛佛佛佛佛佛
+'      佛佛佛佛佛佛佛
+'        佛佛佛佛佛
+'          佛佛佛                         数据归一化小软件
+'            佛                           2018年10月6日1:46
+
+
+'================================　文献下载模块代码　================================'
+'===================================================================================='
+
+' Author : 两颗门牙
+' Date   : 2018/10/6
+
+
+'=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=   功能按钮模块   =*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*='
+'=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*'
+
+Private Sub Command1_Click()
+'数据归一化
+Dim Arry() As Double, m, str() As String
+Dim a, b, n As Integer
+Text2.Text = ""
+str = Split(Text1.Text, ",")
+a = LBound(str()): b = UBound(str())
+ReDim Arry(b) As Double
+For i = a To b
+Arry(i) = Val(str(i))
+Next i
+Call BiaoZhun1(Arry)
+For j = a To b
+Text2.Text = Text2.Text & Format(Arry(j), "0.000") & "　　"
+Next j
+End Sub
+'=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
+'=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
+
+
+'=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=   函数功能模块   =*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*='
+'=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*'
+
+Public Function Max(Arr() As Double) As Double
+'求最大值
+Dim a, b As Integer
+a = LBound(Arr()): b = UBound(Arr())
+Max = Arr(a)
+For i = a To b
+If Arr(i) > Max Then Max = Arr(i)
+Next i
+End Function
+
+Public Function Min(Arr() As Double) As Double
+'求最小值
+Dim a, b As Integer
+a = LBound(Arr()): b = UBound(Arr())
+Min = Arr(a)
+For j = a To b
+If Arr(j) < Min Then Min = Arr(j)
+Next j
+End Function
+
+Public Function Ave(Arr() As Double) As Double
+'求平均值
+Dim a, b As Integer
+Dim Sum As Double
+a = LBound(Arr()): b = UBound(Arr())
+For i = a To b
+Sum = Sum + Arr(i)
+Next i
+Ave = Sum / (b - a + 1)
+End Function
+
+Public Function STD(Arr() As Double) As Double
+'求标准差
+Dim a, b, n As Integer
+Dim Var As Double
+a = LBound(Arr()): b = UBound(Arr())
+For i = a To b
+Var = Var + (Arr(i) - Ave(Arr())) ^ 2
+Next i
+n = b - a + 1
+Var = Var / n
+STD = Sqr(Var)
+End Function
+
+Public Function BiaoZhun1(Arr() As Double) As Double
+'最大最小归一化（线性变换）
+Dim a, b As Integer
+Dim m, n As Double
+a = LBound(Arr()): b = UBound(Arr())
+m = Min(Arr()): n = Max(Arr())
+For i = a To b
+Arr(i) = (Arr(i) - m) / (n - m)
+Next i
+End Function
+
+Public Function BiaoZhun2(Arr() As Double)
+'Z-Score标准化
+Dim a, b As Integer
+Dim m, n As Double
+a = LBound(Arr()): b = UBound(Arr())
+m = Ave(Arr()): n = STD(Arr())
+For i = a To b
+Arr(i) = (Arr(i) - m) / n
+Next i
+End Function
+
+Public Function BiaoZhun3(Arr() As Double)
+'Z-Score简单化
+Dim a, b As Integer
+a = LBound(Arr()): b = UBound(Arr())
+For i = a To b
+Arr(i) = 1 / (1 + Arr(i))
+Next i
+End Function
+'=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
+'=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
