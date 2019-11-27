@@ -1,0 +1,55 @@
+'================================　文献下载模块代码　================================'
+'===================================================================================='
+
+' Author : 两颗门牙
+' Date   : 2018/10/2
+
+
+'=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=   功能按钮模块   =*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*='
+'=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*'
+
+Private Sub Command1_Click()
+Dim str1 As String, str2 As String
+'打开账户密码日志
+If Trim(T1.Text) = "" Or Trim(T2.Text) = "" Then
+MsgBox "账号或密码不能为空", 37, "请检查"
+Else
+Open App.Path & "\vbLog.csv" For Input As #1
+Do While Not EOF(1)
+Line Input #1, str1
+Line Input #1, str2
+Loop
+Close #1
+'账号密码核对
+If T1.Text = str1 And T2.Text = str2 Then
+Me.Hide
+Form1.Show
+ElseIf T1.Text <> str1 Then
+MsgBox "账号错误！", 37, "请检查"
+ElseIf T2.Text <> str2 Then
+MsgBox "密码错误！", 37, "请检查"
+End If
+End If
+End Sub
+
+Private Sub Command2_Click()
+'从系统盘读出密码进行核对
+If Trim(T1.Text) = "" And Trim(T2.Text) = "" Then
+MsgBox "账号和密码不能为空", 37, "请检查"
+Else
+Open App.Path & "\vbLog.csv" For Output As #1
+Print #1, T1.Text & vbCrLf & T2.Text
+Close #1
+End If
+End Sub
+
+Private Sub Command3_Click()
+'消息对话框
+Dim i As Integer
+i = MsgBox("确认退出？", 33, "提示")
+If i = 1 Then
+End
+End If
+End Sub
+'=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
+'=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
