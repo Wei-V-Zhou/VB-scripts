@@ -102,3 +102,173 @@ End If
 End Sub
 '=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
 '=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
+
+
+
+'================================　文献浏览模块代码　================================'
+'===================================================================================='
+
+' Author : 两颗门牙
+' Date   : 2019/1/12
+
+
+'=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=   窗体代码模块   =*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*='
+'=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*'
+
+Private Sub Form_Load()
+'窗体加载事件
+Label3.Caption = 0
+Label3.Visible = False
+WebBrowser1.Silent = True
+WebBrowser1.Navigate "http://xueshu.baidu.com"
+WebBrowser2.Silent = True
+WebBrowser2.Navigate "https://xueshu.baidu.com"
+WebBrowser2.Left = WebBrowser1.Left + 0.5 * WebBrowser1.Width
+WebBrowser2.Top = WebBrowser1.Top
+WebBrowser2.Height = WebBrowser1.Height
+WebBrowser2.Width = 0.5 * WebBrowser1.Width
+Timer1.Enabled = False
+Timer1.Interval = 1000
+Picture1.Visible = False
+Picture1.Left = Me.Width * 0.5 - Picture1.Width * 0.5
+Picture1.Top = Me.Height * 0.5 - Picture1.Top * 0.5
+End Sub
+
+Private Sub Form_Resize()
+'窗口重新设置大小
+On Error GoTo tail
+WebBrowser1.Width = Me.Width - 540
+WebBrowser1.Height = Me.Height - 2175
+WebBrowser2.Left = WebBrowser1.Left + 0.5 * WebBrowser1.Width
+WebBrowser2.Top = WebBrowser1.Top
+WebBrowser2.Height = WebBrowser1.Height
+WebBrowser2.Width = 0.5 * WebBrowser1.Width
+Frame1.Width = WebBrowser1.Width - 6960
+Command1.Width = 0.16 * Frame1.Width
+Command2.Width = Command1.Width
+Command3.Width = Command1.Width
+Command4.Width = Command1.Width
+Command5.Width = Command1.Width
+Command5.Left = Frame1.Width - 360 - Command5.Width
+Command2.Left = Command1.Left + (Command5.Left - Command1.Left) / 4
+Command3.Left = Command1.Left + 2 * (Command5.Left - Command1.Left) / 4
+Command4.Left = Command1.Left + 3 * (Command5.Left - Command1.Left) / 4
+Picture1.Left = Me.Width * 0.5 - Picture1.Width * 0.5
+Picture1.Top = Me.Height * 0.5 - Picture1.Top * 0.5
+tail:
+End Sub
+'=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
+'=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
+
+
+'=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=   功能按钮模块   =*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*='
+'=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*'
+
+Private Sub Command1_Click()
+'复制内容到指定位置
+On Error Resume Next
+Dim a As Integer
+WebBrowser1.ExecWB OLECMDID_COPY, OLECMDEXECOPT_DODEFAULT
+WebBrowser2.ExecWB OLECMDID_COPY, OLECMDEXECOPT_DODEFAULT
+a = MsgBox(Clipboard.GetText, vbOKCancel, "获取的DOI")
+If a = 1 Then
+Form1.Text1.Text = ""
+Form1.Text1.Text = Clipboard.GetText
+Else
+Form1.Text1.Text = ""
+End If
+End Sub
+
+Private Sub Command2_Click()
+'返回搜索页
+Me.Hide
+Form1.Show
+End Sub
+
+Private Sub Command3_Click()
+'刷新当前页面
+On Error Resume Next
+WebBrowser1.Refresh
+WebBrowser2.Refresh
+End Sub
+
+Private Sub Command4_Click()
+'实现分屏功能
+Picture1.Visible = False
+If Command4.Caption = "分屏" Then
+Command4.Caption = "隐藏"
+WebBrowser2.Visible = True
+ElseIf Command4.Caption = "隐藏" Then
+Command4.Caption = "分屏"
+WebBrowser2.Visible = False
+End If
+End Sub
+
+Private Sub Command5_Click()
+'后退
+On Error Resume Next
+If Command4.Caption = "分屏" Then
+WebBrowser1.GoBack
+Else
+WebBrowser2.GoBack
+End If
+End Sub
+'=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
+'=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
+
+
+'=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=   辅助命令模块   =*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*='
+'=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*'
+
+Private Sub Timer1_Timer()
+'触发时间事件
+Label3.Caption = Val(Label3.Caption) + 1
+If Val(Label3.Caption) >= 3 Then
+Picture1.Visible = False
+Timer1.Enabled = False
+Label3.Caption = 0
+End If
+End Sub
+
+Private Sub Web_v1_NewWindow(ByVal URL As String, ByVal flags As Long, ByVal targetframename As String, postdata As Variant, ByVal headers As String, processed As Boolean)
+processed = True
+WebBrowser2.Navigate URL
+Label1.Visible = False
+End Sub
+
+Private Sub WebBrowser1_DocumentComplete(ByVal pDisp As Object, URL As Variant)
+'浏览器加载完成事件
+Picture1.Visible = False
+Timer1.Enabled = False
+Label3.Caption = 0
+End Sub
+
+
+Private Sub WebBrowser1_NewWindow2(ppDisp As Object, Cancel As Boolean)
+'浏览器1打开下载网页
+Dim NFrm As New Form1
+WebBrowser1.RegisterAsBrowser = True
+Set ppDisp = NFrm.WebBrowser1.Object
+NFrm.Visible = True
+End Sub
+
+Private Sub WebBrowser1_ProgressChange(ByVal Progress As Long, ByVal ProgressMax As Long)
+'浏览器进程改变事件
+Picture1.Visible = True
+Timer1.Enabled = True
+If ProgressMax = 0 Then Exit Sub
+If Progress <> -1 And Progress <= ProgressMax Then
+WebBrowser3.Navigate App.Path + "/进度条3.gif"
+End If
+End Sub
+
+Private Sub WebBrowser2_NewWindow2(ppDisp As Object, Cancel As Boolean)
+'浏览器2打开新网页
+Dim NFrm As New Form1
+NFrm.WebBrowser1.RegisterAsBrowser = True
+Set ppDisp = NFrm.WebBrowser1.Object
+NFrm.Visible = True
+End Sub
+
+'=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
+'=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
