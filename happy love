@@ -1,0 +1,21 @@
+
+Private Sub Command2_Click()
+Image1.Visible = True
+End Sub
+
+Private Sub Form_Load()
+Image1.Visible = False
+End Sub
+
+Private Sub Form_Unload(Cancel As Integer)
+Me.Hide
+Form2.Show
+End Sub
+
+Private Sub Command2_Click()
+Image1.Visible = True
+End Sub
+
+Private Sub Form_Load()
+Image1.Visible = False
+End Sub
